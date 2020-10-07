@@ -1,0 +1,21 @@
+class Main {
+    function void main() {
+        var boolean exit;
+        var char key;
+        var SnakeGame game;
+        let exit = false;
+        while(true){
+        	let game = SnakeGame.new();
+        	do game.run();
+        	do game.dispose();
+        	let key = 0;
+        	while(~(key = 32)){
+        		let key = Keyboard.keyPressed();
+        	}
+        	do Screen.clearScreen();
+        	do Output.moveCursor(0,0);
+        }
+        
+        return;
+    }
+}

@@ -1,0 +1,104 @@
+class SnakeGame {
+
+   field Snake snake; //The snake used in the game
+   field int direction; //The direction the snake is moving. 1 = up, 2 = right, 3 = down, 4 = left.
+   field int speed; //The speed of the snake
+   field Apple apple; //The apple used in the game
+
+   //Creates a new game
+   constructor SnakeGame new(){
+      let snake = Snake.new();
+      let apple = Apple.new();
+      let direction = 2;
+      let speed = 250;
+      return this;
+   }
+
+   //Dispose game
+   method void dispose(){
+      do snake.dispose();
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   //Start the game
+   method void run(){
+      var char key; //The key pressed by the user
+      var int snakeX;
+      var int snakeY;
+      var int appleX;
+      var int appleY;
+      var boolean snakeDied;
+      let snakeDied = false;
+      while(~snakeDied){
+         let key = Keyboard.keyPressed();
+         if (key = 131) {
+            if (~(direction = 3)){
+               let direction = 1; // up arrow
+            }
+         }   
+         if (key = 132) {
+            if (~(direction = 4)){
+               let direction = 2; // right arrow
+            }
+         }   
+         if (key = 133) {
+            if (~(direction = 1)){
+               let direction = 3; // down arrow
+            }
+         }   
+         if (key = 130) {
+            if (~(direction = 2)){
+               let direction = 4; // left arrow
+            }
+         }   
+         let snakeDied = ~moveSnake();
+         let snakeX = snake.getX();
+         let snakeY = snake.getY();
+         let appleX = apple.getX() - 5;
+         let appleY = apple.getY() - 5;
+         //Check if snake ate apple
+         if(snakeX = appleX){
+            if (snakeY = appleY){
+               do snake.getBigger();
+               do apple.newLocation(snakeX, snakeY);
+               do apple.draw();
+               //Make game faster
+               let speed = speed * 14 / 15;
+            }
+         }
+      }
+      do Screen.clearScreen();
+      do Output.printString("You LOSE. Press [SPACE] to try again.");
+      do Sys.wait(1000);
+      do snake.dispose();
+      do apple.dispose();
+      return;
+   }
+
+   //Move the snake according to the user's input
+   //1 = up, 2 = right, 3 = down, 4 = left.
+   method boolean moveSnake(){
+      var boolean alive;
+      do snake.clearSnake();
+      if (direction = 1){
+         let alive = snake.moveUp();
+      }
+      if (direction = 2){
+         let alive = snake.moveRight();
+      }
+      if (direction = 3){
+         let alive = snake.moveDown();
+      }
+      if (direction = 4){
+         let alive = snake.moveLeft();
+      }
+      if (~alive){
+         return false;
+      }
+      do snake.drawSnake();
+      do Sys.wait(speed);
+      return true;
+   }
+
+}

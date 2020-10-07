@@ -1,0 +1,47 @@
+class Apple{
+	field int x; 
+	field int y;
+	field int rand;
+
+	//Create a new apple
+	constructor Apple new(){
+		let x = 55;
+		let y = 55;
+		let rand = 10;
+		do draw();
+		return this;
+	}
+
+	//Set a new location for a new apple
+	method void newLocation(int snakeX, int snakeY){
+		let x = snakeX + x;
+		let y = snakeY + y;
+		if (x > 511){
+			let x = 515 - snakeX;
+		}
+		if (y > 255){
+			let y = 255 - snakeY;
+		}
+		return;
+	}
+
+	//Draw the apple
+	method void draw() {
+		do Screen.setColor(true);
+		do Screen.drawCircle(x, y, 5);
+		return;
+	}
+
+	method int getX(){
+		return x;
+	}
+
+	method int getY(){
+		return y;
+	}
+
+	method void dispose(){
+		do Memory.deAlloc(this);
+    	return;
+	}
+}

@@ -1,0 +1,181 @@
+class Snake {
+	
+	field Array xPos;
+	field Array yPos;
+	field Array xSpeed;
+	field Array ySpeed;
+	field int x; //X position of snake
+	field int y; //Y position of snake
+	field int curXSpeed; //The X speed of the snake
+	field int curYSpeed; //The y speed of the snake
+	field int size; //How big the starting snake is
+	field int length;
+	
+	//Creates a new snake
+	constructor Snake new(){
+		let xPos = Array.new(150);
+		let yPos = Array.new(150);
+		let xSpeed = Array.new(150);
+		let ySpeed = Array.new(150);
+		let x = 0;
+		let y = 0;
+		let curXSpeed = 0;
+		let curYSpeed = 0;
+		let size = 10;
+		let length = 1;
+		return this;
+	}
+
+	//Update the snakes position
+	method boolean update(){
+		var int i;
+		let xSpeed[0] = curXSpeed;
+		let ySpeed[0] = curYSpeed;
+		let i = length - 1;
+		while (i > 0){
+		 	let xPos[i] = xPos[i - 1];
+		 	let yPos[i] = yPos[i - 1];
+		 	let xSpeed[i] = xSpeed[i - 1];
+		 	let ySpeed[i] = ySpeed[i - 1];
+		 	let i = i - 1;
+		}
+		let xPos[0] = xPos[0] + curXSpeed;
+		let yPos[0] = yPos[0] + curYSpeed;
+		if (xPos[0] > 500){
+			return false;
+		} 
+		if (xPos[0] < 0){
+			return false;
+		}
+		if (yPos[0] > 240){
+			return false;
+		}
+		if (yPos[0] < 0){
+			return false;
+		}
+		let i = 1;
+		while (i < length){
+			if (xPos[0] = xPos[i]){
+				if (yPos[0] = yPos[i]){
+					return false;
+				}
+			}
+			let i = i + 1;
+		}
+		let xSpeed[0] = curXSpeed;
+		let ySpeed[0] = curYSpeed;
+		return true;
+	}
+
+	//Draw the snake
+	method void drawSnake(){
+		var int i;
+		let i = 0;
+		do Screen.setColor(true);
+		while (i < length){
+			do Screen.drawRectangle(xPos[i], yPos[i], xPos[i] + size, yPos[i] + size);
+			let i = i + 1;
+		}
+    	return;
+	}
+
+	//Clear the snake
+	method void clearSnake(){
+		var int i;
+		let i = 0;
+		do Screen.setColor(false);
+		while (i < length){
+			do Screen.drawRectangle(xPos[i], yPos[i], xPos[i] + size, yPos[i] + size);
+			let i = i + 1;
+		}
+    	return;
+	}
+
+	//Make snake bigger
+	method void getBigger(){
+    	var int i;
+    	do clearSnake();
+    	let i = 0;
+    	while (i < length){
+    		let xSpeed[length - i] = xSpeed[length - i - 1];
+    		let ySpeed[length - i] = ySpeed[length - i - 1];
+    		let xPos[length - i] = xPos[length - i - 1];
+    		let yPos[length - i] = yPos[length - i - 1];
+    		let i = i + 1;
+    	}
+    	let xSpeed[0] = curXSpeed;
+    	let ySpeed[0] = curYSpeed;
+    	let xPos[0] = xPos[1] + curXSpeed;
+    	let yPos[0] = yPos[1] + curYSpeed;
+     	let length = length + 1;
+     	do drawSnake();
+	 	return;
+	}
+
+	//Move the snake up
+	method boolean moveUp(){
+		var boolean alive;
+		let curXSpeed = 0;
+		let curYSpeed = -10;
+		let alive = update();
+		return alive;
+	}
+
+	//Move the snake down
+	method boolean moveDown(){
+		var boolean alive;
+		let curXSpeed = 0;
+		let curYSpeed = 10;
+		let alive = update();
+		return alive;
+	}
+
+	//Move the snake left
+	method boolean moveLeft(){
+		var boolean alive;
+		let curXSpeed = -10;
+		let curYSpeed = 0;
+		let alive = update();
+		return alive;
+	}
+
+	//Move the snake right
+	method boolean moveRight(){
+		var boolean alive;
+		let curXSpeed = 10;
+		let curYSpeed = 0;
+		let alive = update();
+		return alive;
+	}
+
+	method boolean checkIfDied(){
+		var int i;
+		let i = 0;
+		if (xPos[0] > 500){
+			return true;
+		} 
+		if (xPos[0] < 0){
+			return true;
+		}
+		if (yPos[0] > 240){
+			return true;
+		}
+		if (yPos[0] < 0){
+			return true;
+		}
+		return false;
+	}
+
+	method void dispose(){
+    	do Memory.deAlloc(this);
+    	return;
+    }
+
+    method int getX(){
+    	return xPos[0];
+    }
+
+    method int getY(){
+    	return yPos[0];
+    }
+}
